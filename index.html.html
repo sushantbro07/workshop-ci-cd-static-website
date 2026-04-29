@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Computing & DevOps Fundamentals — AWS Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --aws-orange: #FF9900;
+    --aws-dark: #0a0e1a;
+    --aws-navy: #131f3e;
+    --aws-mid: #1e2d4d;
+    --aws-card: #162035;
+    --aws-border: rgba(255,153,0,0.2);
+    --aws-text: #e8edf5;
+    --aws-muted: #8899b8;
+    --aws-highlight: #f0a830;
+    --aws-green: #4ade80;
+    --aws-teal: #38bdf8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--aws-dark);
+    color: var(--aws-text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 80% 60% at 60% 40%, rgba(255,153,0,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(56,189,248,0.05) 0%, transparent 60%),
+      linear-gradient(170deg, #0a0e1a 0%, #0d1526 50%, #0a0e1a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 6vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,153,0,0.03) 0px, transparent 1px, transparent 60px),
+      repeating-linear-gradient(90deg, rgba(255,153,0,0.03) 0px, transparent 1px, transparent 60px);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,153,0,0.1);
+    border: 1px solid rgba(255,153,0,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--aws-orange);
+    margin-bottom: 2rem;
+    width: fit-content;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--aws-orange); animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+    max-width: 820px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--aws-orange);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    color: var(--aws-muted);
+    max-width: 540px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .stat-num span { color: var(--aws-orange); }
+  .stat-label { font-size: 13px; color: var(--aws-muted); margin-top: 4px; letter-spacing: 0.03em; }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--aws-muted);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .hero-scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--aws-muted), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+  /* SECTIONS */
+  section { padding: 6rem 6vw; }
+
+  .section-tag {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--aws-orange);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--aws-muted);
+    font-size: 1.05rem;
+    max-width: 560px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* OVERVIEW STRIP */
+  .overview {
+    background: var(--aws-navy);
+    border-top: 1px solid var(--aws-border);
+    border-bottom: 1px solid var(--aws-border);
+    padding: 3rem 6vw;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+  }
+
+  .overview-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .overview-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(255,153,0,0.12);
+    border: 1px solid rgba(255,153,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+
+  .overview-label { font-size: 12px; color: var(--aws-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .overview-value { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 1.05rem; color: #fff; margin-top: 2px; }
+
+  /* SCHEDULE */
+  .schedule-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .day-card {
+    background: var(--aws-card);
+    border: 1px solid var(--aws-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  .day-card:hover {
+    border-color: rgba(255,153,0,0.5);
+    transform: translateY(-2px);
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.4rem 1.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .day-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--aws-orange);
+    opacity: 0.35;
+    min-width: 52px;
+    line-height: 1;
+  }
+
+  .day-info { flex: 1; }
+
+  .day-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .day-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .tag {
+    background: rgba(255,153,0,0.1);
+    border: 1px solid rgba(255,153,0,0.2);
+    color: #ffb733;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.03em;
+  }
+
+  .tag.teal {
+    background: rgba(56,189,248,0.1);
+    border-color: rgba(56,189,248,0.25);
+    color: #7dd3fc;
+  }
+
+  .tag.green {
+    background: rgba(74,222,128,0.1);
+    border-color: rgba(74,222,128,0.25);
+    color: #86efac;
+  }
+
+  .day-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,153,0,0.08);
+    border: 1px solid rgba(255,153,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--aws-orange);
+    font-size: 16px;
+    transition: background 0.2s, transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .day-card.open .day-toggle { transform: rotate(45deg); background: rgba(255,153,0,0.15); }
+
+  .day-body {
+    display: none;
+    padding: 0 1.8rem 1.8rem;
+    border-top: 1px solid rgba(255,153,0,0.1);
+  }
+
+  .day-card.open .day-body { display: block; }
+
+  .sessions-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.4rem;
+  }
+
+  .session-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .session-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--aws-orange);
+    opacity: 0.7;
+    padding-top: 3px;
+  }
+
+  .session-content {}
+  .session-title { font-weight: 500; color: #fff; font-size: 0.95rem; margin-bottom: 6px; }
+
+  .session-topics {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .session-topics li {
+    font-size: 13px;
+    color: var(--aws-muted);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .session-topics li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: rgba(255,153,0,0.4);
+    font-size: 10px;
+    top: 3px;
+  }
+
+  /* WHAT YOU LEARN */
+  .learn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .learn-card {
+    background: var(--aws-card);
+    border: 1px solid var(--aws-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: border-color 0.3s;
+  }
+
+  .learn-card:hover { border-color: rgba(255,153,0,0.4); }
+
+  .learn-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .learn-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .learn-card p {
+    font-size: 13.5px;
+    color: var(--aws-muted);
+    line-height: 1.6;
+  }
+
+  /* TECH STACK */
+  .tools-section { background: var(--aws-navy); }
+
+  .tools-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .tool-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--aws-card);
+    border: 1px solid var(--aws-border);
+    border-radius: 100px;
+    padding: 8px 18px 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--aws-text);
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .tool-pill:hover { border-color: rgba(255,153,0,0.5); background: rgba(255,153,0,0.05); }
+  .tool-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-orange { background: var(--aws-orange); }
+  .dot-teal { background: var(--aws-teal); }
+  .dot-green { background: var(--aws-green); }
+
+  /* CTA */
+  .cta-section {
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,153,0,0.08) 0%, transparent 70%),
+      var(--aws-dark);
+    text-align: center;
+    border-top: 1px solid var(--aws-border);
+  }
+
+  .cta-section .section-title { margin: 0 auto 1rem; }
+  .cta-section .section-desc { margin: 0 auto 2.5rem; }
+
+  .cta-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--aws-orange);
+    color: #000;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 32px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--aws-text);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 14px 32px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-outline:hover { border-color: rgba(255,255,255,0.5); transform: translateY(-1px); }
+
+  /* FOOTER */
+  footer {
+    background: #060a12;
+    border-top: 1px solid var(--aws-border);
+    padding: 2rem 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  .footer-brand span { color: var(--aws-orange); }
+
+  footer p {
+    font-size: 13px;
+    color: var(--aws-muted);
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 6vw;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,153,0,0.1);
+  }
+
+  .nav-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .nav-brand span { color: var(--aws-orange); }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--aws-muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: #fff; }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .session-item { grid-template-columns: 1fr; gap: 4px; }
+    .session-num { font-size: 10px; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">AWS<span>Training</span></a>
+  <ul class="nav-links">
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#outcomes">Outcomes</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#enroll">Enroll</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top: 6rem;">
+  <div class="hero-badge"><span></span>Live Instructor-Led Training</div>
+  <h1>Cloud Computing<br>& <em>DevOps</em><br>Fundamentals</h1>
+  <p class="hero-sub">An intensive 5-day, AWS-focused bootcamp covering cloud infrastructure, core services, version control, and CI/CD pipelines — from zero to deployment.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">5<span>d</span></span><span class="stat-label">Intensive Days</span></div>
+    <div class="stat"><span class="stat-num">30<span>h</span></span><span class="stat-label">Total Hours</span></div>
+    <div class="stat"><span class="stat-num">15<span>+</span></span><span class="stat-label">Hands-on Labs</span></div>
+    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Sessions / Day</span></div>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-line"></div>Scroll</div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div class="overview">
+  <div class="overview-grid">
+    <div class="overview-item">
+      <div class="overview-icon">☁️</div>
+      <div><div class="overview-label">Platform</div><div class="overview-value">Amazon Web Services</div></div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-icon">⏱️</div>
+      <div><div class="overview-label">Duration</div><div class="overview-value">5 Days · 30 Hours</div></div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-icon">🎯</div>
+      <div><div class="overview-label">Level</div><div class="overview-value">Beginner to Intermediate</div></div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-icon">🔧</div>
+      <div><div class="overview-label">Format</div><div class="overview-value">Theory + Hands-on Labs</div></div>
+    </div>
+    <div class="overview-item">
+      <div class="overview-icon">🏆</div>
+      <div><div class="overview-label">Outcome</div><div class="overview-value">Mini Project + Certificate</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="section-tag">Full Curriculum</div>
+  <h2 class="section-title">5-Day Training Schedule</h2>
+  <p class="section-desc">Three 2-hour sessions per day. Each day builds on the last — from cloud foundations all the way to a live deployment.</p>
+
+  <div class="schedule-grid">
+
+    <!-- DAY 1 -->
+    <div class="day-card open" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div class="day-num">01</div>
+        <div class="day-info">
+          <div class="day-title">Cloud Foundations & AWS Introduction</div>
+          <div class="day-tags">
+            <span class="tag">IaaS / PaaS / SaaS</span>
+            <span class="tag">AWS Console</span>
+            <span class="tag">IAM</span>
+          </div>
+        </div>
+        <div class="day-toggle">+</div>
+      </div>
+      <div class="day-body">
+        <ul class="sessions-list">
+          <li class="session-item">
+            <div class="session-num">Session 1</div>
+            <div class="session-content">
+              <div class="session-title">Cloud Fundamentals</div>
+              <ul class="session-topics">
+                <li>Evolution of computing — Traditional vs Cloud</li>
+                <li>Cloud service models: IaaS, PaaS, SaaS</li>
+                <li>Deployment models: Public, Private, Hybrid</li>
+                <li>Benefits: scalability, elasticity, cost-efficiency</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 2</div>
+            <div class="session-content">
+              <div class="session-title">Cloud Ecosystem & Providers</div>
+              <ul class="session-topics">
+                <li>Overview of major cloud providers</li>
+                <li>Introduction to AWS</li>
+                <li>Real-world cloud use cases</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 3</div>
+            <div class="session-content">
+              <div class="session-title">AWS Basics & IAM</div>
+              <ul class="session-topics">
+                <li>AWS Global Infrastructure — Regions & Availability Zones</li>
+                <li>AWS Management Console walkthrough</li>
+                <li>Identity and Access Management: users, roles, policies</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-card" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div class="day-num">02</div>
+        <div class="day-info">
+          <div class="day-title">Core AWS Services & Database Fundamentals</div>
+          <div class="day-tags">
+            <span class="tag">EC2</span>
+            <span class="tag">S3</span>
+            <span class="tag teal">RDS</span>
+            <span class="tag teal">DynamoDB</span>
+          </div>
+        </div>
+        <div class="day-toggle">+</div>
+      </div>
+      <div class="day-body">
+        <ul class="sessions-list">
+          <li class="session-item">
+            <div class="session-num">Session 1</div>
+            <div class="session-content">
+              <div class="session-title">Compute Services — EC2</div>
+              <ul class="session-topics">
+                <li>Introduction to Amazon EC2</li>
+                <li>Instance types, key pairs, security groups</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 2</div>
+            <div class="session-content">
+              <div class="session-title">Storage Services — S3</div>
+              <ul class="session-topics">
+                <li>Amazon S3 overview and storage types</li>
+                <li>Use cases for object storage</li>
+                <li>Hands-on: basic S3 bucket usage</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 3</div>
+            <div class="session-content">
+              <div class="session-title">Database Fundamentals</div>
+              <ul class="session-topics">
+                <li>What is a database?</li>
+                <li>SQL vs NoSQL — differences and use cases</li>
+                <li>Overview of Amazon RDS and DynamoDB</li>
+                <li>Choosing the right database for your workload</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-card" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div class="day-num">03</div>
+        <div class="day-info">
+          <div class="day-title">Networking (VPC) & DevOps Introduction</div>
+          <div class="day-tags">
+            <span class="tag">VPC</span>
+            <span class="tag">Subnets</span>
+            <span class="tag teal">DevOps Lifecycle</span>
+          </div>
+        </div>
+        <div class="day-toggle">+</div>
+      </div>
+      <div class="day-body">
+        <ul class="sessions-list">
+          <li class="session-item">
+            <div class="session-num">Session 1</div>
+            <div class="session-content">
+              <div class="session-title">Networking Basics</div>
+              <ul class="session-topics">
+                <li>Fundamentals: IP addressing and subnets</li>
+                <li>Introduction to Amazon VPC</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 2</div>
+            <div class="session-content">
+              <div class="session-title">VPC Components & Security</div>
+              <ul class="session-topics">
+                <li>Public vs Private subnets</li>
+                <li>Internet Gateway concept</li>
+                <li>Security Groups vs Network ACLs</li>
+                <li>Activity: AWS architecture diagram (VPC + EC2 + subnet)</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 3</div>
+            <div class="session-content">
+              <div class="session-title">DevOps Fundamentals</div>
+              <ul class="session-topics">
+                <li>What is DevOps? Traditional vs DevOps workflow</li>
+                <li>DevOps lifecycle: Plan → Code → Build → Test → Deploy → Monitor</li>
+                <li>Key principles: automation, collaboration, continuous improvement</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-card" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div class="day-num">04</div>
+        <div class="day-info">
+          <div class="day-title">Version Control & CI/CD Pipelines</div>
+          <div class="day-tags">
+            <span class="tag">Git / GitHub</span>
+            <span class="tag green">CI/CD</span>
+            <span class="tag green">GitHub Actions</span>
+          </div>
+        </div>
+        <div class="day-toggle">+</div>
+      </div>
+      <div class="day-body">
+        <ul class="sessions-list">
+          <li class="session-item">
+            <div class="session-num">Session 1</div>
+            <div class="session-content">
+              <div class="session-title">Version Control — Git & GitHub</div>
+              <ul class="session-topics">
+                <li>Introduction to Git and GitHub</li>
+                <li>Basic commands: clone, commit, push</li>
+                <li>Branching and collaboration workflows</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 2</div>
+            <div class="session-content">
+              <div class="session-title">Modern DevOps Concepts</div>
+              <ul class="session-topics">
+                <li>Containerization — basic concept</li>
+                <li>Orchestration — basic concept</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 3</div>
+            <div class="session-content">
+              <div class="session-title">CI/CD Fundamentals & Hands-on</div>
+              <ul class="session-topics">
+                <li>Continuous Integration vs Continuous Deployment</li>
+                <li>Pipeline stages: build → test → deploy</li>
+                <li>Tools overview: GitHub Actions / Jenkins</li>
+                <li>Hands-on: create a simple CI/CD pipeline</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-card" onclick="toggleDay(this)">
+      <div class="day-header">
+        <div class="day-num">05</div>
+        <div class="day-info">
+          <div class="day-title">Monitoring, Cost Optimization & Mini Project</div>
+          <div class="day-tags">
+            <span class="tag">CloudWatch</span>
+            <span class="tag">Lambda</span>
+            <span class="tag green">Live Deployment</span>
+          </div>
+        </div>
+        <div class="day-toggle">+</div>
+      </div>
+      <div class="day-body">
+        <ul class="sessions-list">
+          <li class="session-item">
+            <div class="session-num">Session 1</div>
+            <div class="session-content">
+              <div class="session-title">Monitoring & Logging</div>
+              <ul class="session-topics">
+                <li>Importance of monitoring in cloud environments</li>
+                <li>Introduction to Amazon CloudWatch</li>
+                <li>Metrics vs Logs</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 2</div>
+            <div class="session-content">
+              <div class="session-title">Advanced AWS Services & Cost Optimization</div>
+              <ul class="session-topics">
+                <li>AWS Lambda — serverless concept</li>
+                <li>Amazon SNS — notifications</li>
+                <li>Amazon CloudFront — CDN basics</li>
+                <li>AWS pay-as-you-go pricing model</li>
+                <li>Billing dashboard, budget alerts & cost optimization tips</li>
+              </ul>
+            </div>
+          </li>
+          <li class="session-item">
+            <div class="session-num">Session 3</div>
+            <div class="session-content">
+              <div class="session-title">Mini Project & Presentation</div>
+              <ul class="session-topics">
+                <li>Deploy a simple application on AWS using EC2/S3</li>
+                <li>Integrate basic CI/CD pipeline</li>
+                <li>Group work, live demo, and feedback session</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT YOU LEARN -->
+<section id="outcomes" style="background: var(--aws-navy);">
+  <div class="section-tag">Learning Outcomes</div>
+  <h2 class="section-title">What You'll Walk Away With</h2>
+  <p class="section-desc">Practical, job-ready skills across cloud infrastructure, DevOps practices, and AWS services.</p>
+
+  <div class="learn-grid">
+    <div class="learn-card">
+      <span class="learn-icon">☁️</span>
+      <h4>Cloud Architecture</h4>
+      <p>Understand IaaS, PaaS, SaaS models and design basic cloud architectures using VPC, EC2, and subnets on AWS.</p>
+    </div>
+    <div class="learn-card">
+      <span class="learn-icon">🗃️</span>
+      <h4>Storage & Databases</h4>
+      <p>Work with S3 for object storage and choose between SQL (RDS) and NoSQL (DynamoDB) databases for real workloads.</p>
+    </div>
+    <div class="learn-card">
+      <span class="learn-icon">🔐</span>
+      <h4>Security & IAM</h4>
+      <p>Configure IAM users, roles, and policies. Understand Security Groups and Network ACLs for access control.</p>
+    </div>
+    <div class="learn-card">
+      <span class="learn-icon">🔁</span>
+      <h4>CI/CD Pipelines</h4>
+      <p>Build and run automated pipelines using GitHub Actions or Jenkins covering build, test, and deploy stages.</p>
+    </div>
+    <div class="learn-card">
+      <span class="learn-icon">📊</span>
+      <h4>Monitoring & Cost Control</h4>
+      <p>Use CloudWatch for metrics and logs. Set up budget alerts and apply cost optimization best practices.</p>
+    </div>
+    <div class="learn-card">
+      <span class="learn-icon">🚀</span>
+      <h4>Live Deployment</h4>
+      <p>Deploy a real application on AWS with a working CI/CD pipeline and present it to the group on Day 5.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools" class="tools-section">
+  <div class="section-tag">Technologies Covered</div>
+  <h2 class="section-title">Tools & Technologies</h2>
+  <p class="section-desc">Hands-on experience with industry-standard tools used in real cloud and DevOps teams.</p>
+
+  <div class="tools-grid">
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon EC2</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon S3</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon RDS</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon DynamoDB</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon VPC</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>AWS IAM</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>AWS Lambda</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon CloudWatch</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon SNS</div>
+    <div class="tool-pill"><div class="tool-dot dot-orange"></div>Amazon CloudFront</div>
+    <div class="tool-pill"><div class="tool-dot dot-teal"></div>Git</div>
+    <div class="tool-pill"><div class="tool-dot dot-teal"></div>GitHub</div>
+    <div class="tool-pill"><div class="tool-dot dot-teal"></div>GitHub Actions</div>
+    <div class="tool-pill"><div class="tool-dot dot-teal"></div>Jenkins</div>
+    <div class="tool-pill"><div class="tool-dot dot-green"></div>Docker (basics)</div>
+    <div class="tool-pill"><div class="tool-dot dot-green"></div>Kubernetes (concepts)</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="enroll">
+  <div class="section-tag" style="text-align:center;">Get Started</div>
+  <h2 class="section-title" style="max-width:540px;">Ready to Start Your Cloud Journey?</h2>
+  <p class="section-desc">5 days. 30 hours. Real AWS skills you can use from day one.</p>
+  <div class="cta-btns">
+    <button class="btn-primary">Enroll Now</button>
+    <button class="btn-outline">Download Syllabus PDF</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">AWS<span>Training</span> · Cloud & DevOps</div>
+  <p>5 Days · 30 Hours · AWS-Focused · Hands-on Labs</p>
+</footer>
+
+<script>
+function toggleDay(card) {
+  card.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
